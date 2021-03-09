@@ -1,16 +1,13 @@
-import React, {Component} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import RegisterFirst from "../../../Components/Auth/Register/RegisterFirst";
 
-class Register extends Component {
-  render() {
-    return (
-      <View>
-        <Text> textInComponent </Text>
-      </View>
-    );
-  }
+const Register = () => {
+  return (
+    <View>
+      <RegisterFirst/>
+    </View>
+  )
 }
 
-export default Register;
-
-const styles = StyleSheet.create({});
+export default Register

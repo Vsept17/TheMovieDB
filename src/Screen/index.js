@@ -1,5 +1,7 @@
-import HomeScreen from "./HomeScreen";
+import MainScreen from "./MainScreen";
+import RegisterScreen from "./AuthScreen/Register";
 
 export {
-    HomeScreen,
-}
+    MainScreen,
+    RegisterScreen,
+};

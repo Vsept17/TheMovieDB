@@ -16,11 +16,24 @@ import {
   StatusBar,
 } from 'react-native';
 
-import HomeScreen from "./Screen/HomeScreen";
+// import {MainScreen} from "./Screen";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import {MainScreen, RegisterScreen} from "./Screen";
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
-      <HomeScreen />
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Main" component={MainScreen} options={{
+          headerShown: false
+        }}/>
+        <Stack.Screen name="Register" component={RegisterScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+      // <MainScreen />
   );
 };
 
