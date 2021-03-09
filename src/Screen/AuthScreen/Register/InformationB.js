@@ -14,7 +14,7 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class RegisterFirst extends Component {
+class InformationBScreen extends Component {
   state = {
     firstName: '',
     lastName: '',
@@ -41,16 +41,21 @@ class RegisterFirst extends Component {
       {label: 'Male    ', value: 0},
       {label: 'Female', value: 1},
     ];
+    console.log("ini ", this.state.firstName); 
     return (
       <ScrollView style={styles.container}>
         <View style={styles.containerName}>
           <View style={{width: '50%', paddingHorizontal: 10}}>
             <Text style={styles.textTitle}>First Name</Text>
-            <TextInput style={styles.textInput} placeholder="first name" />
+            <TextInput style={styles.textInput} placeholder="first name" onChangeText={(text) => this.setState({
+              firstName: text
+            })} />
           </View>
           <View style={{width: '50%', paddingHorizontal: 10}}>
             <Text style={styles.textTitle}>Last Name</Text>
-            <TextInput style={styles.textInput} placeholder="last name" />
+            <TextInput style={styles.textInput} placeholder="last name" onChangeText={(text) => this.setState({
+              lastName: text
+            })}/>
           </View>
         </View>
         <View  style={styles.containerEmail}>
@@ -74,7 +79,9 @@ class RegisterFirst extends Component {
         </View>
         <View style={styles.containerEmail}>
           <Text style={styles.textTitle}>Email</Text>
-          <TextInput style={styles.textInput} placeholder="email" />
+          <TextInput style={styles.textInput} placeholder="email" onChangeText={(text) => this.setState({
+              email: text
+            })}/>
         </View>
         <View
           style={{
@@ -93,7 +100,7 @@ class RegisterFirst extends Component {
   }
 }
 
-export default RegisterFirst;
+export default InformationBScreen;
 
 const styles = StyleSheet.create({
   container: {

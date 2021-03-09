@@ -1,7 +1,11 @@
 import MainScreen from "./MainScreen";
-import RegisterScreen from "./AuthScreen/Register";
+import InformationAScreen from "./AuthScreen/Register/InformationA";
+import InformationBScreen from "./AuthScreen/Register/InformationB";
+import ConfirmationScreen from "./AuthScreen/Register/Confirmation";
 
 export {
     MainScreen,
-    RegisterScreen,
+    InformationAScreen,
+    InformationBScreen,
+    ConfirmationScreen,
 };

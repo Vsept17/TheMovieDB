@@ -8,6 +8,8 @@ import {
   Image,
 } from 'react-native';
 import PopularMovie from "../../Components/MainScreen/PopularMovie";
+import NowPlayingMovie from "../../Components/MainScreen/NowPlayingMovie";
+import UpComingMovie from "../../Components/MainScreen/UpComingMovie";
 
 const MainScreen = ({navigation}) => {
   return (
@@ -16,12 +18,14 @@ const MainScreen = ({navigation}) => {
         <View style={styles.navbar}>
           <Text style={styles.text}>The MovieDB</Text>
           <View>
-            <TouchableOpacity style={styles.btnSignIn} onPress={() => navigation.navigate('Register')}>
+            <TouchableOpacity style={styles.btnSignIn} onPress={() => navigation.navigate('InformationA')}>
               <Text style={{color: '#F4F4F4'}}>Register</Text>
             </TouchableOpacity>
           </View>
         </View>
+        <NowPlayingMovie />
         <PopularMovie />
+        <UpComingMovie />
       </View>
     </View>
   );
@@ -32,6 +36,7 @@ export default MainScreen;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
+    height: '100%',
     backgroundColor: '#22211F'
   },
   text:{

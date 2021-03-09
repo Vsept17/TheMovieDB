@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {Text, StyleSheet, View, ScrollView, Image, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 
 const urlPoster = 'http://image.tmdb.org/t/p/w500';
 const url =
-  'https://api.themoviedb.org/3/movie/top_rated?api_key=2246337a80611cc7c7330ca5156842f5&language=en-US&page=1';
+  'https://api.themoviedb.org/3/movie/now_playing?api_key=2246337a80611cc7c7330ca5156842f5&language=en-US&page=1';
 
-class PopularMovie extends Component {
+class NowPlayingMovie extends Component {
   state = {
     movie: [],
   };
@@ -24,16 +24,16 @@ class PopularMovie extends Component {
       });
   }
   render() {
-    const popularMovie = this.state.movie;
+    const nowPlayingMovie = this.state.movie;
     return (
       <>
-        <Text style={styles.title}>Popular Movie</Text>
+        <Text style={styles.title}>Now Playing Movie</Text>
         <ScrollView
           style={styles.scrollMovie}
           horizontal
           showsVerticalScrollIndicator={false}>
-          {popularMovie &&
-            popularMovie.map(
+          {nowPlayingMovie &&
+            nowPlayingMovie.map(
               ({
                 id,
                 poster_path,
@@ -70,7 +70,7 @@ class PopularMovie extends Component {
   }
 }
 
-export default PopularMovie;
+export default NowPlayingMovie;
 
 const styles = StyleSheet.create({
   scrollMovie: {
