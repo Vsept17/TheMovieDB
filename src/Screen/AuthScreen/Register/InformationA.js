@@ -52,8 +52,8 @@ class InformationAScreen extends Component {
   };
   render() {
     const radio_props = [
-      {label: 'Male    ', value: 0},
-      {label: 'Female', value: 1},
+      {label: 'Male    ', value: 'Male'},
+      {label: 'Female', value: 'Female'},
     ];
 
     const {firstName, lastName, jobdesk, gender, email} = this.state;
@@ -62,7 +62,16 @@ class InformationAScreen extends Component {
       <ScrollView style={styles.container}>
         <View
           style={{
-            height: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text style={styles.titleHeader}>Information A</Text>
+          <Text style={styles.titleHeader}>01</Text>
+        </View>
+        <View
+          style={{
+            // height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             // backgroundColor: 'white',
@@ -94,7 +103,7 @@ class InformationAScreen extends Component {
             </View>
           </View>
           <View style={styles.containerGender}>
-          <Text style={styles.textTitle}>Jobdesk</Text>
+            <Text style={styles.textTitle}>Jobdesk</Text>
             <View>
               {this.state.jobdesk.map((jobdesk, index) => {
                 return (
@@ -132,7 +141,7 @@ class InformationAScreen extends Component {
                   paddingVertical: 15,
                   borderRadius: 10,
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
                   // width: '50%',
                 }}
                 onPress={(e) => this.addJobdesk(e)}>
@@ -147,7 +156,7 @@ class InformationAScreen extends Component {
                 radio_props={radio_props}
                 initial={0}
                 onPress={(value) => {
-                  this.setState({value: value});
+                  this.setState({gender: value});
                 }}
                 labelHorizontal={true}
                 label
@@ -172,15 +181,15 @@ class InformationAScreen extends Component {
             style={{
               width: '80%',
               flexDirection: 'row',
-              alignItems: 'flex-end',
+              alignItems: 'center',
               justifyContent: 'flex-end',
               paddingVertical: 15,
             }}>
             <TouchableOpacity
               style={styles.btnNext}
               onPress={() => {
-                this.onSubmit();
-                this.props.navigation.navigate('Confirmation');
+                // this.onSubmit();
+                this.props.navigation.navigate('InformationB');
               }}>
               <Text>Next</Text>
             </TouchableOpacity>
@@ -225,6 +234,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  titleHeader: {
+    color: '#F4F4F4',
+    fontSize: 20,
+    marginBottom: 20,
   },
   textTitle: {
     fontSize: 18,
