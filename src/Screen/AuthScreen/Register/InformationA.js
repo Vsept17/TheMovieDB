@@ -18,9 +18,9 @@ class InformationAScreen extends Component {
   state = {
     firstName: '',
     lastName: '',
-    jobdesk: [],
     gender: '',
     email: '',
+    jobdesk: [],
   };
 
   addJobdesk() {
@@ -30,11 +30,11 @@ class InformationAScreen extends Component {
   }
 
   handleChange(e, index) {
-    this.state.jobdesk[index] = e.target.value;
+    this.state.jobdesk[index] = e;
     this.setState({jobdesk: this.state.jobdesk});
   }
 
-  handleRemove() {
+  handleRemove(index) {
     this.state.jobdesk.splice(index);
     this.setState({jobdesk: this.state.jobdesk});
   }
@@ -43,13 +43,39 @@ class InformationAScreen extends Component {
     try {
       await AsyncStorage.setItem('firstName', this.state.firstName);
       await AsyncStorage.setItem('lastName', this.state.lastName);
-      await AsyncStorage.setItem('jobdesk', this.state.jobdesk);
       await AsyncStorage.setItem('gender', this.state.gender);
       await AsyncStorage.setItem('email', this.state.email);
+      const jsonValue = JSON.stringify(this.state.jobdesk);
+      await AsyncStorage.setItem('jobdesk', jsonValue);
     } catch (err) {
       console.log('this error', err);
     }
   };
+
+  // getData = async () => {
+  //   try {
+  //     const firstName = await AsyncStorage.getItem('firstName');
+  //     const lastName = await AsyncStorage.getItem('lastName');
+  //     const jobdesk = await AsyncStorage.getItem('jobdesk');
+  //     const gender = await AsyncStorage.getItem('gender');
+  //     const email = await AsyncStorage.getItem('email');
+
+  //     this.setState({
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       gender: gender,
+  //       email: email,
+  //       jobdesk: jobdesk,
+  //     });
+  //   } catch (e) {
+  //     console.log('this error', e);
+  //   }
+  // };
+
+  // componentDidMount() {
+  //   this.getData();
+  // }
+
   render() {
     const radio_props = [
       {label: 'Male    ', value: 'Male'},
@@ -57,7 +83,7 @@ class InformationAScreen extends Component {
     ];
 
     const {firstName, lastName, jobdesk, gender, email} = this.state;
-    console.log('ini ', this.state.firstName);
+    console.log('ini ', this.state.jobdesk);
     return (
       <ScrollView style={styles.container}>
         <View
@@ -188,7 +214,7 @@ class InformationAScreen extends Component {
             <TouchableOpacity
               style={styles.btnNext}
               onPress={() => {
-                // this.onSubmit();
+                this.onSubmit();
                 this.props.navigation.navigate('InformationB');
               }}>
               <Text>Next</Text>

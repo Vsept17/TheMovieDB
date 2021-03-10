@@ -25,7 +25,7 @@ const ConfirmationScreen = ({navigation}) => {
 
       setGetFirstName(firstName);
       setGetLastName(lastName);
-      setGetJobdesk(jobdesk);
+      setGetJobdesk(jobdesk).toString();
       setGetGender(gender);
       setGetEmail(email);
       setGetHaveLaptop(haveLaptop);
@@ -35,6 +35,15 @@ const ConfirmationScreen = ({navigation}) => {
       console.log('this error', e);
     }
   };
+
+  const clearAppData = async function() {
+    try {
+        const keys = await AsyncStorage.getAllKeys();
+        await AsyncStorage.multiRemove(keys);
+    } catch (error) {
+        console.error('Error clearing app data.');
+    }
+}
   useEffect(() => {
     getData();
   });
@@ -93,7 +102,7 @@ const ConfirmationScreen = ({navigation}) => {
         <TouchableOpacity style={styles.btnBack} onPress={() => navigation.goBack()}>
           <Text>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnNext}>
+        <TouchableOpacity style={styles.btnNext} onPress={() => {clearAppData(); navigation.navigate('RegisterDone');}}>
           <Text>Submit</Text>
         </TouchableOpacity>
       </View>
@@ -138,6 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   dataEntry:{
+    width: '55%',
     color: '#F4F4F4',
     fontSize: 18,
   },

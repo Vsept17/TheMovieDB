@@ -30,11 +30,33 @@ class InformationBScreen extends Component {
       console.log('this error', err);
     }
   };
+  getData = async () => {
+    try {
+        const haveLaptop = await AsyncStorage.getItem('haveLaptop');
+        const address = await AsyncStorage.getItem('address');
+        const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+        this.setState({
+          haveLaptop: haveLaptop,
+          address: address,
+          phoneNumber: phoneNumber,
+        })
+
+    } catch(e) {
+      console.log("this error", e);
+    }
+  }
+
+  componentDidMount(){
+    this.getData()
+  }
+
   render() {
     const radio_props = [
       {label: 'Yes    ', value: 'Yes'},
       {label: 'No', value: 'No'},
     ];
+
+    const {haveLaptop, address, phoneNumber} = this.state
     console.log('ini ', this.state.address);
     console.log('ini ', this.state.haveLaptop);
     console.log('ini ', this.state.phoneNumber);
@@ -57,6 +79,7 @@ class InformationBScreen extends Component {
             <RadioForm
               radio_props={radio_props}
               initial={0}
+              value={haveLaptop}
               onPress={(value) => {
                 this.setState({haveLaptop: value});
               }}
@@ -74,6 +97,7 @@ class InformationBScreen extends Component {
               style={{width: '100%', fontSize: 18,}}
               multiline={true}
               placeholder="Address"
+              value={address}
               onChangeText={(text) =>
                 this.setState({
                   address: text,
@@ -87,6 +111,7 @@ class InformationBScreen extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Phone Number"
+            value={phoneNumber}
             onChangeText={(text) =>
               this.setState({
                 phoneNumber: text,
