@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import {Text, StyleSheet, View, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import axios from 'axios';
+import {API_MOVIE} from "@env";
 
 const urlPoster = 'http://image.tmdb.org/t/p/w500';
 const url =
-  'https://api.themoviedb.org/3/movie/top_rated?api_key=2246337a80611cc7c7330ca5156842f5&language=en-US&page=1';
+  `https://api.themoviedb.org/3/movie/top_rated?api_key=2${API_MOVIE}&language=en-US&page=1`;
 
 class PopularMovie extends Component {
   state = {
@@ -37,13 +45,27 @@ class PopularMovie extends Component {
               ({
                 id,
                 poster_path,
+                backdrop_path,
                 original_title,
+                title,
                 vote_average,
                 release_date,
+                overview,
+                video,
               }) => {
                 return (
                   <View style={styles.cardPopular} key={id}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.props.navigate('DetailMovieScreen', {
+                          id: id,
+                          title: title,
+                          poster: poster_path,
+                          backdrop: backdrop_path,
+                          release: release_date,
+                          rating: vote_average,
+                          description: overview,
+                        })}>
                       <Image
                         source={{uri: `${urlPoster}${poster_path}`}}
                         style={{width: 100, height: 150}}

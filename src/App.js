@@ -15,6 +15,8 @@ import {
   InformationBScreen,
   ConfirmationScreen,
   RegisterDoneScreen,
+  DetailMovieScreen,
+  VideoPlayer
 } from './Screen';
 
 const Stack = createStackNavigator();
@@ -28,6 +30,28 @@ const App = () => {
           component={MainScreen}
           options={{
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="DetailMovieScreen"
+          component={DetailMovieScreen}
+          options={{
+            title: false,
+            headerTintColor: 'white',
+            headerStyle:{
+              backgroundColor: '#22211F'
+            }
+          }}
+        />
+        <Stack.Screen
+          name="VideoPlayer"
+          component={VideoPlayer}
+          options={{
+            title: false,
+            headerTintColor: 'white',
+            headerStyle:{
+              backgroundColor: '#22211F'
+            }
           }}
         />
         <Stack.Screen

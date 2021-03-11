@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import RadioForm, {
   RadioButton,
@@ -13,6 +14,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class InformationAScreen extends Component {
   state = {
@@ -49,32 +51,42 @@ class InformationAScreen extends Component {
       await AsyncStorage.setItem('jobdesk', jsonValue);
     } catch (err) {
       console.log('this error', err);
+      if (this.firstName === null) {
+        ToastAndroid.showWithGravityAndOffset(
+          'First name not be null',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+      }
     }
   };
 
-  // getData = async () => {
-  //   try {
-  //     const firstName = await AsyncStorage.getItem('firstName');
-  //     const lastName = await AsyncStorage.getItem('lastName');
-  //     const jobdesk = await AsyncStorage.getItem('jobdesk');
-  //     const gender = await AsyncStorage.getItem('gender');
-  //     const email = await AsyncStorage.getItem('email');
+  getData = async () => {
+    try {
+      const firstName = await AsyncStorage.getItem('firstName');
+      const lastName = await AsyncStorage.getItem('lastName');
+      const jobdesk = await AsyncStorage.getItem('jobdesk');
+      const gender = await AsyncStorage.getItem('gender');
+      const email = await AsyncStorage.getItem('email');
 
-  //     this.setState({
-  //       firstName: firstName,
-  //       lastName: lastName,
-  //       gender: gender,
-  //       email: email,
-  //       jobdesk: jobdesk,
-  //     });
-  //   } catch (e) {
-  //     console.log('this error', e);
-  //   }
-  // };
+      const dataJobdesk = jobdesk != null ? JSON.parse(jobdesk) : [];
+      this.setState({
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender,
+        email: email,
+        jobdesk: dataJobdesk,
+      });
+    } catch (e) {
+      console.log('this error', e);
+    }
+  };
 
-  // componentDidMount() {
-  //   this.getData();
-  // }
+  componentDidMount() {
+    this.getData();
+  }
 
   render() {
     const radio_props = [
@@ -84,6 +96,7 @@ class InformationAScreen extends Component {
 
     const {firstName, lastName, jobdesk, gender, email} = this.state;
     console.log('ini ', this.state.jobdesk);
+    console.log('ini gender ', this.state.gender);
     return (
       <ScrollView style={styles.container}>
         <View
@@ -108,6 +121,7 @@ class InformationAScreen extends Component {
               <TextInput
                 style={styles.textInput}
                 placeholder="first name"
+                value={firstName}
                 onChangeText={(text) =>
                   this.setState({
                     firstName: text,
@@ -120,6 +134,7 @@ class InformationAScreen extends Component {
               <TextInput
                 style={styles.textInput}
                 placeholder="last name"
+                value={lastName}
                 onChangeText={(text) =>
                   this.setState({
                     lastName: text,
@@ -138,7 +153,7 @@ class InformationAScreen extends Component {
                       width: '100%',
                       flexDirection: 'row',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
+                      // justifyContent: 'space-between',
                     }}
                     key={index}>
                     <View style={{width: '70%'}}>
@@ -150,9 +165,8 @@ class InformationAScreen extends Component {
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={() => this.handleRemove(index)}
-                        style={styles.btnNext}>
-                        <Text>Delete</Text>
+                        onPress={() => this.handleRemove(index)} style={{marginHorizontal: 10}}>
+                        <Icon name='delete' color='#ff0000' size={30} />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -177,17 +191,23 @@ class InformationAScreen extends Component {
           </View>
           <View style={styles.containerEmail}>
             <Text style={styles.textTitle}>Gender</Text>
-            <View style={{paddingVertical: 10}}>
+            <View
+              style={{
+                paddingVertical: 10,
+                backgroundColor: '#F4F4F4',
+                paddingHorizontal: 10,
+                borderRadius: 15,
+              }}>
               <RadioForm
                 radio_props={radio_props}
                 initial={0}
+                value={gender}
+                label
                 onPress={(value) => {
                   this.setState({gender: value});
                 }}
                 labelHorizontal={true}
-                label
                 formHorizontal={true}
-                buttonWrapStyle={{marginLeft: 10}}
               />
             </View>
           </View>
@@ -196,6 +216,7 @@ class InformationAScreen extends Component {
             <TextInput
               style={styles.textInput}
               placeholder="email"
+              value={email}
               onChangeText={(text) =>
                 this.setState({
                   email: text,

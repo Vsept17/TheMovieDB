@@ -37,13 +37,26 @@ class NowPlayingMovie extends Component {
               ({
                 id,
                 poster_path,
+                backdrop_path,
                 original_title,
+                title,
                 vote_average,
                 release_date,
+                overview,
+                video,
               }) => {
                 return (
                   <View style={styles.cardPopular} key={id}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() =>
+                        this.props.navigate('DetailMovieScreen', {
+                          id: id,
+                          title: title,
+                          poster: poster_path,
+                          backdrop: backdrop_path,
+                          release: release_date,
+                          rating: vote_average,
+                          description: overview,
+                        })}>
                       <Image
                         source={{uri: `${urlPoster}${poster_path}`}}
                         style={{width: 100, height: 150}}

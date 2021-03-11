@@ -22,10 +22,11 @@ const ConfirmationScreen = ({navigation}) => {
       const haveLaptop = await AsyncStorage.getItem('haveLaptop');
       const address = await AsyncStorage.getItem('address');
       const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+      const dataJobdesk = jobdesk != null ? JSON.parse(jobdesk).toString() : [];
 
       setGetFirstName(firstName);
       setGetLastName(lastName);
-      setGetJobdesk(jobdesk).toString();
+      setGetJobdesk(dataJobdesk);
       setGetGender(gender);
       setGetEmail(email);
       setGetHaveLaptop(haveLaptop);

@@ -32,22 +32,21 @@ class InformationBScreen extends Component {
   };
   getData = async () => {
     try {
-        const haveLaptop = await AsyncStorage.getItem('haveLaptop');
-        const address = await AsyncStorage.getItem('address');
-        const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-        this.setState({
-          haveLaptop: haveLaptop,
-          address: address,
-          phoneNumber: phoneNumber,
-        })
-
-    } catch(e) {
-      console.log("this error", e);
+      const haveLaptop = await AsyncStorage.getItem('haveLaptop');
+      const address = await AsyncStorage.getItem('address');
+      const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+      this.setState({
+        haveLaptop: haveLaptop,
+        address: address,
+        phoneNumber: phoneNumber,
+      });
+    } catch (e) {
+      console.log('this error', e);
     }
-  }
+  };
 
-  componentDidMount(){
-    this.getData()
+  componentDidMount() {
+    this.getData();
   }
 
   render() {
@@ -56,7 +55,7 @@ class InformationBScreen extends Component {
       {label: 'No', value: 'No'},
     ];
 
-    const {haveLaptop, address, phoneNumber} = this.state
+    const {haveLaptop, address, phoneNumber} = this.state;
     console.log('ini ', this.state.address);
     console.log('ini ', this.state.haveLaptop);
     console.log('ini ', this.state.phoneNumber);
@@ -75,18 +74,16 @@ class InformationBScreen extends Component {
 
         <View style={styles.containerEmail}>
           <Text style={styles.textTitle}>Have a Laptop/PC?</Text>
-          <View style={{paddingVertical: 10}}>
+          <View style={{paddingVertical: 10, backgroundColor: '#F4F4F4', paddingHorizontal: 10, borderRadius: 15}}>
             <RadioForm
               radio_props={radio_props}
-              initial={0}
+              initial={haveLaptop == 1 ? 1 : 0}
               value={haveLaptop}
               onPress={(value) => {
                 this.setState({haveLaptop: value});
               }}
               labelHorizontal={true}
-              label
               formHorizontal={true}
-              buttonWrapStyle={{marginLeft: 10}}
             />
           </View>
         </View>
@@ -94,7 +91,7 @@ class InformationBScreen extends Component {
           <Text style={styles.textTitle}>Address</Text>
           <View style={styles.inputReview}>
             <TextInput
-              style={{width: '100%', fontSize: 18,}}
+              style={{width: '100%', fontSize: 18}}
               multiline={true}
               placeholder="Address"
               value={address}
@@ -129,11 +126,16 @@ class InformationBScreen extends Component {
             paddingVertical: 15,
           }}>
           <TouchableOpacity
-            style={styles.btnNext}
+            style={styles.btnBack}
             onPress={() => this.props.navigation.goBack()}>
             <Text>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnNext} onPress={() => {this.onSubmit(); this.props.navigation.navigate('Confirmation');}}>
+          <TouchableOpacity
+            style={styles.btnNext}
+            onPress={() => {
+              this.onSubmit();
+              this.props.navigation.navigate('Confirmation');
+            }}>
             <Text>Next</Text>
           </TouchableOpacity>
         </View>
@@ -209,6 +211,12 @@ const styles = StyleSheet.create({
   // },
   btnNext: {
     backgroundColor: '#FF7314',
+    paddingHorizontal: 50,
+    paddingVertical: 15,
+    borderRadius: 10,
+  },
+  btnBack: {
+    backgroundColor: '#F4F4F4',
     paddingHorizontal: 50,
     paddingVertical: 15,
     borderRadius: 10,
