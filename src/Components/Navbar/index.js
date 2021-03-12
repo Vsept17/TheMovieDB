@@ -5,7 +5,7 @@ class Navbar extends Component {
   render() {
     return (
       <View style={styles.navbar}>
-        <Text style={styles.text}>The MovieDB</Text>
+        <Text style={styles.text}>The Movie</Text>
         <View>
           <TouchableOpacity
             style={styles.btnSignIn}

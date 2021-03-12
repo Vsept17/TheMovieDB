@@ -1,3 +1,4 @@
+import SplashScreen from "./SplashScreen";
 import MainScreen from "./MainScreen";
 import InformationAScreen from "./AuthScreen/Register/InformationA";
 import InformationBScreen from "./AuthScreen/Register/InformationB";
@@ -6,6 +7,7 @@ import RegisterDoneScreen from "./AuthScreen/Register/RegisterDone";
 import DetailMovieScreen from "../Components/DetailMovieScreen";
 
 export {
+    SplashScreen,
     MainScreen,
     DetailMovieScreen,
     InformationAScreen,
