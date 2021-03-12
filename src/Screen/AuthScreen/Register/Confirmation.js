@@ -103,7 +103,7 @@ const ConfirmationScreen = ({navigation}) => {
         <TouchableOpacity style={styles.btnBack} onPress={() => navigation.goBack()}>
           <Text>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnNext} onPress={() => {clearAppData(); navigation.navigate('RegisterDone');}}>
+        <TouchableOpacity style={styles.btnNext} onPress={() => {clearAppData(); navigation.push('RegisterDone');}}>
           <Text>Submit</Text>
         </TouchableOpacity>
       </View>

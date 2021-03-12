@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import axios from 'axios';
+import { API_MOVIE } from "@env";
 
 const urlPoster = 'http://image.tmdb.org/t/p/w500';
 const url =
-  'https://api.themoviedb.org/3/movie/upcoming?api_key=2246337a80611cc7c7330ca5156842f5&language=en-US&page=1';
+  `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_MOVIE}&language=en-US&page=1`;
 
 class UpComingMovie extends Component {
   state = {

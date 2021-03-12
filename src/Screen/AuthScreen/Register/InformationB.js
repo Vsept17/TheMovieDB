@@ -19,6 +19,8 @@ class InformationBScreen extends Component {
     haveLaptop: '',
     address: '',
     phoneNumber: '',
+    isValidation: false,
+    errMsg: '',
   };
 
   onSubmit = async () => {
@@ -45,6 +47,31 @@ class InformationBScreen extends Component {
     }
   };
 
+  validation = () => {
+    if (this.state.haveLaptop === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please pick have a Laptop/PC!',
+      });
+    } else if (this.state.address === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your address!',
+      });
+    } else if (this.state.phoneNumber === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your phone number!',
+      });
+    } else {
+      this.onSubmit();
+      this.setState({
+        errMsg: ''
+      });
+      this.props.navigation.navigate('Confirmation');
+    }
+  };
+
   componentDidMount() {
     this.getData();
   }
@@ -55,7 +82,7 @@ class InformationBScreen extends Component {
       {label: 'No', value: 'No'},
     ];
 
-    const {haveLaptop, address, phoneNumber} = this.state;
+    const {haveLaptop, address, phoneNumber, isValidation, errMsg} = this.state;
     console.log('ini ', this.state.address);
     console.log('ini ', this.state.haveLaptop);
     console.log('ini ', this.state.phoneNumber);
@@ -74,7 +101,13 @@ class InformationBScreen extends Component {
 
         <View style={styles.containerEmail}>
           <Text style={styles.textTitle}>Have a Laptop/PC?</Text>
-          <View style={{paddingVertical: 10, backgroundColor: '#F4F4F4', paddingHorizontal: 10, borderRadius: 15}}>
+          <View
+            style={{
+              paddingVertical: 10,
+              backgroundColor: '#F4F4F4',
+              paddingHorizontal: 10,
+              borderRadius: 15,
+            }}>
             <RadioForm
               radio_props={radio_props}
               initial={haveLaptop == 1 ? 1 : 0}
@@ -108,6 +141,7 @@ class InformationBScreen extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Phone Number"
+            keyboardType= 'phone-pad'
             value={phoneNumber}
             onChangeText={(text) =>
               this.setState({
@@ -116,6 +150,9 @@ class InformationBScreen extends Component {
             }
           />
         </View>
+        {isValidation === true ? (
+          <Text style={styles.textValidation}>{errMsg}</Text>
+        ) : null}
         <View
           style={{
             width: '80%',
@@ -133,8 +170,7 @@ class InformationBScreen extends Component {
           <TouchableOpacity
             style={styles.btnNext}
             onPress={() => {
-              this.onSubmit();
-              this.props.navigation.navigate('Confirmation');
+              this.validation();
             }}>
             <Text>Next</Text>
           </TouchableOpacity>
@@ -220,5 +256,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     paddingVertical: 15,
     borderRadius: 10,
+  },
+  textValidation: {
+    fontSize: 18,
+    color: '#ff0000',
+    alignSelf: 'center'
   },
 });

@@ -16,6 +16,8 @@ import RadioForm, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+const regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
 class InformationAScreen extends Component {
   state = {
     firstName: '',
@@ -23,6 +25,8 @@ class InformationAScreen extends Component {
     gender: '',
     email: '',
     jobdesk: [],
+    isValidation: false,
+    errMsg: '',
   };
 
   addJobdesk() {
@@ -51,15 +55,6 @@ class InformationAScreen extends Component {
       await AsyncStorage.setItem('jobdesk', jsonValue);
     } catch (err) {
       console.log('this error', err);
-      if (this.firstName === null) {
-        ToastAndroid.showWithGravityAndOffset(
-          'First name not be null',
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-          25,
-          50,
-        );
-      }
     }
   };
 
@@ -84,6 +79,44 @@ class InformationAScreen extends Component {
     }
   };
 
+  validation = () => {
+    if (this.state.firstName === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your First Name!',
+      });
+    } else if (this.state.lastName === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your Last Name!',
+      });
+    } else if (this.state.jobdesk.length === 0) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your Jobdesk!',
+      });
+    } else if (this.state.gender === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please pick your Gender!',
+      });
+    } else if (this.state.email === null) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your Email!',
+      });
+    } else if (!regexEmail.test(this.state.email)) {
+      this.setState({
+        isValidation: true,
+        errMsg: 'Please fill your Email correctly!',
+      });
+    }
+    else {
+      this.onSubmit();
+      this.props.navigation.navigate('InformationB');
+    }
+  };
+
   componentDidMount() {
     this.getData();
   }
@@ -94,9 +127,19 @@ class InformationAScreen extends Component {
       {label: 'Female', value: 'Female'},
     ];
 
-    const {firstName, lastName, jobdesk, gender, email} = this.state;
+    const {
+      firstName,
+      lastName,
+      jobdesk,
+      gender,
+      email,
+      errMsg,
+      isValidation,
+    } = this.state;
     console.log('ini ', this.state.jobdesk);
     console.log('ini gender ', this.state.gender);
+    console.log('err', this.state.errMsg);
+    console.log('err', this.state.isValidation);
     return (
       <ScrollView style={styles.container}>
         <View
@@ -120,7 +163,7 @@ class InformationAScreen extends Component {
               <Text style={styles.textTitle}>First Name</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="first name"
+                placeholder="First Name"
                 value={firstName}
                 onChangeText={(text) =>
                   this.setState({
@@ -128,12 +171,13 @@ class InformationAScreen extends Component {
                   })
                 }
               />
+              
             </View>
             <View style={{width: '50%', paddingHorizontal: 10}}>
               <Text style={styles.textTitle}>Last Name</Text>
               <TextInput
                 style={styles.textInput}
-                placeholder="last name"
+                placeholder="Last Name"
                 value={lastName}
                 onChangeText={(text) =>
                   this.setState({
@@ -159,14 +203,16 @@ class InformationAScreen extends Component {
                     <View style={{width: '70%'}}>
                       <TextInput
                         style={styles.textInput}
+                        placeholder='Jobdesk'
                         onChangeText={(e) => this.handleChange(e, index)}
                         value={jobdesk}
                       />
                     </View>
                     <View>
                       <TouchableOpacity
-                        onPress={() => this.handleRemove(index)} style={{marginHorizontal: 10}}>
-                        <Icon name='delete' color='#ff0000' size={30} />
+                        onPress={() => this.handleRemove(index)}
+                        style={{marginHorizontal: 10}}>
+                        <Icon name="delete" color="#ff0000" size={30} />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -216,6 +262,7 @@ class InformationAScreen extends Component {
             <TextInput
               style={styles.textInput}
               placeholder="email"
+              keyboardType='email-address'
               value={email}
               onChangeText={(text) =>
                 this.setState({
@@ -224,6 +271,9 @@ class InformationAScreen extends Component {
               }
             />
           </View>
+          {isValidation === true ? (
+                <Text style={styles.textValidation}>{errMsg}</Text>
+              ) : null}
           <View
             style={{
               width: '80%',
@@ -235,8 +285,7 @@ class InformationAScreen extends Component {
             <TouchableOpacity
               style={styles.btnNext}
               onPress={() => {
-                this.onSubmit();
-                this.props.navigation.navigate('InformationB');
+                this.validation();
               }}>
               <Text>Next</Text>
             </TouchableOpacity>
@@ -305,5 +354,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 10,
+  },
+  textValidation: {
+    fontSize: 18,
+    color: '#ff0000',
   },
 });

@@ -10,88 +10,121 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
-import {API_YOUTUBE} from '@env';
+import {API_MOVIE} from '@env';
 
 const DetailMovieScreen = ({route, navigation}) => {
-  const {
-    id,
-    poster,
-    backdrop,
-    title,
-    release,
-    rating,
-    description,
-  } = route.params;
-  const [items, setItems] = useState([]);
+  const {id} = route.params;
+  console.log(id);
+  const [getDetail, setGetDetail] = useState([]);
+  const [getVideo, setGetVideo] = useState([]);
+  const [seeTrailler, setSeeTrailer] = useState(false);
   const urlPoster = 'http://image.tmdb.org/t/p/w500';
-  const url = `http://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${title} Official Trailer&type=video&key=${API_YOUTUBE}`;
+  // const url = `http://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${title} Official Trailer&type=video&key=${API_YOUTUBE}`;
+  const urlDetail = `https://api.themoviedb.org/3/movie/${id}?api_key=${API_MOVIE}&language=en-US`;
+  const urlVideo = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_MOVIE}&language=en-US`;
 
-  const getVideo = () => {
+  const getDetailMovie = () => {
     axios
-      .get(url)
+      .get(urlDetail)
       .then((res) => {
-        const video = res.data.items;
-        // const video2 = video.snippet
-        setItems(video);
-        console.log('test youtube', video);
+        const dataDetailMovie = res.data;
+        setGetDetail(dataDetailMovie);
+        console.log('test data', dataDetailMovie);
       })
       .catch((err) => {
-        console.log('ini error', err);
+        console.log('ini error detail', err);
       });
   };
 
+  const getVideoYoutube = () => {
+    axios
+      .get(urlVideo)
+      .then((res) => {
+        const embedVideo = res.data.results;
+        setGetVideo(embedVideo);
+        console.log('test youtube', embedVideo);
+      })
+      .catch((err) => {
+        console.log('ini error yt', err);
+      });
+  };
+
+  const handleSeeTrailler = () => {
+    setSeeTrailer(true);
+  };
+
   useEffect(() => {
-    getVideo();
-  });
+    getDetailMovie(id);
+    getVideoYoutube(id);
+  }, [id]);
 
   return (
     <ScrollView style={{backgroundColor: '#22211F'}}>
       <View style={{width: '100%', backgroundColor: '#22211F', padding: 10}}>
-        {items &&
-          items.map(({snippet}) => {
-            return (
-              <View
-                style={{width: '100%', height: 300}}
-                key={snippet.channelId}>
-                <Text>{snippet.title}</Text>
-                <WebView
-                  source={{uri: 'https://www.youtube.com/embed/SEUXfv87Wpk'}}
-                />
-              </View>
-            );
-          })}
-        <View style={{width: '100%', height: 300}}>
-          <WebView
-            source={{uri: 'https://www.youtube.com/embed/SEUXfv87Wpk'}}
-          />
-        </View>
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginVertical: 15,
-          }}>
-          <View style={{width: '30%'}}>
-            <Image
-              source={{uri: `${urlPoster}${poster}`}}
-              style={{width: '100%', height: 150}}
-            />
-          </View>
-          <View style={{width: '70%', marginHorizontal: 10}}>
-            <Text style={styles.title}>{title}</Text>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.detail}>Release {release}</Text>
-              <View style={{flexDirection: 'row', marginHorizontal: 20}}>
-                <Icon name="star" color="#ffd700" size={20} />
-                <Text style={styles.detail}>{rating}</Text>
+        <View>
+          {seeTrailler === true ? (
+            <View>
+              {getVideo &&
+                getVideo.map(({id, key}) => {
+                  return (
+                    <View
+                      style={{width: '100%', marginVertical: 15, height: 300}}
+                      key={id}>
+                      <WebView
+                        javaScriptEnabled={true}
+                        scrollEnabled={false}
+                        allowsFullscreenVideo={true}
+                        source={{
+                          uri: `https://www.youtube.com/embed/${key}`,
+                        }}
+                      />
+                    </View>
+                  );
+                })}
+            </View>
+          ) : null}
+
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginVertical: 15,
+            }}>
+            <View style={{width: '30%'}}>
+              <Image
+                source={{uri: `${urlPoster}${getDetail.poster_path}`}}
+                style={{width: '100%', height: 150}}
+              />
+            </View>
+            <View style={{width: '70%', marginHorizontal: 10}}>
+              <Text style={styles.title}>{getDetail.title}</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={styles.detail}>
+                  Release {getDetail.release_date}
+                </Text>
+                <View style={{flexDirection: 'row', marginHorizontal: 20}}>
+                  <Icon name="star" color="#ffd700" size={20} />
+                  <Text style={styles.detail}>{getDetail.vote_average}</Text>
+                </View>
               </View>
             </View>
           </View>
+          <View style={{marginVertical: 10}}>
+            <Text style={styles.desc}>{getDetail.overview}</Text>
+          </View>
+          <View style={{marginVertical: 10}}>
+            <TouchableOpacity
+              style={styles.btnTrailer}
+              onPress={() => handleSeeTrailler()}>
+              <Icon name="play" color="black" size={20} />
+              <Text>See Trailler</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={{marginVertical: 10}}>
-          <Text style={styles.desc}>{description}</Text>
-        </View>
+        {/* );
+            },
+          )} */}
       </View>
     </ScrollView>
   );
@@ -112,6 +145,13 @@ const styles = StyleSheet.create({
   },
   desc: {
     color: '#F4F4F4',
+  },
+  btnTrailer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingVertical: 5,
   },
 });
 
